@@ -1,3 +1,25 @@
+<?php
+
+require_once 'models/Credentials.php';
+
+    $id = !empty($_GET["id"]) ? $_GET["id"] : 0;
+
+    if (!empty($_POST["id"])) {
+
+        $c = Credentials::delete($_POST['id']);
+
+        header("Location: index.php");
+        exit();
+    } else {
+        $c = Credentials::get($id);
+    }
+
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -16,9 +38,9 @@
 <div class="container">
     <h2>Zugangsdaten löschen</h2>
 
-    <form class="form-horizontal" action="delete.php?id=29" method="post">
-        <input type="hidden" name="id" value="29"/>
-        <p class="alert alert-error">Wollen Sie die Zugangsdaten von Agivu / opera.com wirklich löschen?</p>
+    <form class="form-horizontal" action="delete.php?id=<?= $c->getId()?>>" method="post">
+        <input type="hidden" name="id" value="<?= $c->getId() ?>>"/>
+        <p class="alert alert-error">Wollen Sie die Zugangsdaten von <?= $c->getName()?> / <?= $c->getDomain()?> wirklich löschen?</p>
         <div class="form-actions">
             <button type="submit" class="btn btn-danger">Löschen</button>
             <a class="btn btn-default" href="index.php">Abbruch</a>
