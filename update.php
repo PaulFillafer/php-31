@@ -1,3 +1,35 @@
+<?php
+
+require_once 'models/Credentials.php';
+
+if (empty($_GET['id'])){
+    header("Location: index.php");
+    exit();
+} else {
+    $c = Credentials::get($_GET['id']);
+
+}
+
+if ($c == null) {
+    http_response_code(404);
+    die();
+}
+
+if (empty($_POST)) {
+    $c->setName(isset($_POST['name']) ? $_POST['name'] : '');
+    $c->setDomain(isset($_POST['domain']) ? $_POST['domain'] : '');
+    $c->setCmsUsername(isset($_POST['cms_username']) ? $_POST['cms_username'] : '');
+    $c->setCmsPassword(isset($_POST['cms_password']) ? $_POST['cms_password'] : '');
+
+    if ($c->save()) {
+        header("Location: view.php?id=" . $c->getId());
+        exit();
+    }
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -18,7 +50,7 @@
         <h2>Zugangsdaten bearbeiten</h2>
     </div>
 
-    <form class="form-horizontal" action="update.php?id=29" method="post">
+    <form class="form-horizontal" action="update.php?id=<?= $c->getId() ?>>" method="post">
 
         <div class="row">
             <div class="col-md-5">
