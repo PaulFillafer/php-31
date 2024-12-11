@@ -36,21 +36,21 @@
 
             require_once 'models/Credentials.php';
 
-            $credentials = new Credentials::getAll();
+            $credentials = Credentials::getAll();
 
             foreach ($credentials as $c) {
                 echo "<tr>";
                 echo "<td>" . $c->getName() . "</td>";
-                echo "<td>" . $c->getDomName() . "</td>";
-                echo "<td>" . $c->getCmsName() . "</td>";
+                echo "<td>" . $c->getDomain() . "</td>";
+                echo "<td>" . $c->getCmsUsername() . "</td>";
                 echo "<td>" . $c->getCmsPassword() . "</td>";
                 echo "<td>";
                 echo '<a class="btn btn-info" href="view.php?id=' . $c->getId() . '"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                echo '$nbsp;';
-                echo '<a class="btn btn-info" href="view.php?id=' . $c->getId() . '"><span class="glyphicon glyphicon-eye-pencil"></span></a>';
-                echo '$nbsp;';
-                echo '<a class="btn btn-info" href="view.php?id=' . $c->getId() . '"><span class="glyphicon glyphicon-remove"></span></a>';
-                echo '$nbsp;';
+                echo '&nbsp;';
+                echo '<a class="btn btn-info" href="update.php?id=' . $c->getId() . '"><span class="glyphicon glyphicon-pencil"></span></a>';
+                echo '&nbsp;';
+                echo '<a class="btn btn-info" href="delete.php?id=' . $c->getId() . '"><span class="glyphicon glyphicon-remove"></span></a>';
+                echo '&nbsp;';
                 echo "<tr/>";
             }
 

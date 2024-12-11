@@ -15,6 +15,8 @@ if ($c == null) {
     die();
 }
 
+print_r($c);
+
 ?>
 
 <!DOCTYPE html>
@@ -35,8 +37,8 @@ if ($c == null) {
     <h2>Zugangsdaten anzeigen</h2>
 
     <p>
-        <a class="btn btn-primary" href="update.php?id=<?= $c-getId()?>">Aktualisieren</a>
-        <a class="btn btn-danger" href="delete.php?id=<?= $c-getId()?>">Löschen</a>
+        <a class="btn btn-primary" href="update.php?id=<?= $c->getId()?>">Aktualisieren</a>
+        <a class="btn btn-danger" href="delete.php?id=<?= $c->getId()?>">Löschen</a>
         <a class="btn btn-default" href="index.php">Zurück</a>
     </p>
 
@@ -44,19 +46,19 @@ if ($c == null) {
         <tbody>
         <tr>
             <th>Name</th>
-            <td><?= $c-getName()?></td>
+            <td><?= $c->getName()?></td>
         </tr>
         <tr>
             <th>Domäne</th>
-            <td><?= $c-getDomain()?></td>
+            <td><?= $c->getDomain()?></td>
         </tr>
         <tr>
             <th>CMS-Benutzername</th>
-            <td><?= $c-getCMSUsername()?></td>
+            <td><?= $c->getCMSUsername()?></td>
         </tr>
         <tr>
             <th>CMS-Passwort</th>
-            <td><?= $c-getCMSPassword()?></td>
+            <td><?= $c->getCMSPassword()?></td>
         </tr>
         </tbody>
     </table>

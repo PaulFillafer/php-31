@@ -39,7 +39,7 @@ class Credentials implements DatabaseObject
     public function save(){
         if ($this->validate()) {
 
-            if($this->id =! null && this->id > 0){
+            if($this->id =! null && $this->id > 0){
                 $this->update();
             } else {
                 $this->id = $this->create();
@@ -149,6 +149,8 @@ class Credentials implements DatabaseObject
     {
         $this->errors = $errors;
     }
+
+
 
 
     public function create()

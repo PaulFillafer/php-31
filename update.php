@@ -15,7 +15,7 @@ if ($c == null) {
     die();
 }
 
-if (empty($_POST)) {
+if (!empty($_POST)) {
     $c->setName(isset($_POST['name']) ? $_POST['name'] : '');
     $c->setDomain(isset($_POST['domain']) ? $_POST['domain'] : '');
     $c->setCmsUsername(isset($_POST['cms_username']) ? $_POST['cms_username'] : '');
