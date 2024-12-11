@@ -1,6 +1,8 @@
 <?php
 
-class Credentials
+require_once "DatabaseObject.php";
+
+class Credentials implements DatabaseObject
 {
     private $id = 0;
     private $name = '';
@@ -14,6 +16,43 @@ class Credentials
     {
 
     }
+
+    public function validate(){
+        return $this->validateHelper('Name', 'name', $this->name, 32) &
+         $this->validateHelper('Domäne', 'domain', $this->domain, 128) &
+         $this->validateHelper('CMS-Benutzername', 'cms_username', $this->cms_username, 64) &
+         $this->validateHelper('CMS-Passwort', 'cms_password', $this->cms_password, 64);
+    }
+
+    public function validateHelper($label, $key, $value, $maxLength){
+        if(strlen($value) == 0){
+            $this->errors[$key] = "$label darf nicht leer sein";
+            return false;
+        } else if (strlen($value) > $maxLength){
+            $this->errors[$key] = "$label zu lang (max . $maxLength Zeichen)";
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function save(){
+        if ($this->validate()) {
+
+            if($this->id =! null && this->id > 0){
+                $this->update();
+            } else {
+                $this->id = $this->create();
+            }
+
+
+            return true;
+        }
+
+        return false;
+    }
+
+
 
     /**
      * @return string
@@ -112,5 +151,56 @@ class Credentials
     }
 
 
+    public function create()
+    {
+        $sql = "INSERT INTO credentials (name, domain, cms_username, cms_password) Values (?, ?, ?, ?)";
+        $db = Database::connect();
+        $stmt = $db->prepare($sql);
+        $stmt->execute(array($this->name, $this->domain, $this->cms_username, $this->cms_password));
+        $lastID = $db->lastInsertId();
+        Database::disconnect();
+        return $lastID;
+    }
 
+    public function update()
+    {
+        $sql = "UPDATE credentials SET name = ?, domain = ?, cms_username = ?, cms_password = ? WHERE id = ?";
+        $db = Database::connect();
+        $stmt = $db->prepare($sql);
+        $stmt->execute(array($this->name, $this->domain, $this->cms_username, $this->cms_password, $this->id));
+        $lastID = $db->lastInsertId();
+        Database::disconnect();
+        return $lastID;
+    }
+
+    public static function get($id)
+    {
+        $sql = "SELECT * FROM credentials WHERE id = ?";
+        $db = Database::connect();
+        $stmt = $db->prepare($sql);
+        $stmt->execute(array($id));
+        $item = $stmt->fetchObject('Credentials');
+        Database::disconnect();
+        return $item !== false ? $item : null;
+    }
+
+    public static function getAll()
+    {
+        $sql = "SELECT * FROM credentials ORDER BY name ASC, domain ASC";
+        $db = Database::connect();
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $items = $stmt->fetchAll(PDO::FETCH_CLASS, 'Credentials');
+        Database::disconnect();
+        return $items;
+    }
+
+    public static function delete($id)
+    {
+        $sql = "DELETE FROM credentials WHERE id = ?";
+        $db = Database::connect();
+        $stmt = $db->prepare($sql);
+        $stmt->execute(array($id));
+        Database::disconnect();
+    }
 }
